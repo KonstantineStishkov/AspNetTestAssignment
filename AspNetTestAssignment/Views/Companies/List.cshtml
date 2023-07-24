@@ -1,0 +1,32 @@
+﻿@using AspNetTestAssignment.Constants
+@model string
+
+@{
+    TableType tableType = Enum.TryParse(Model, out TableType t) ? t : TableType.Companies;
+}
+
+<div class="@Model-toolbar">
+        <div class="companies-title left-align">@TableTypes.Title[tableType]</div>
+    <div class="buttons right-align">
+        @if (TableTypes.HasAddButton[tableType])
+        {
+            <button type="button" class="toolbar-button @Model-add"><i class="fa-sharp fa-solid fa-plus"></i></button>
+        }
+        @if (TableTypes.HasEditButton[tableType])
+        {
+            <button type="button" class="toolbar-button @Model-edit"><i class="fa-sharp fa-solid fa-pencil"></i></button>
+        }
+        @if (TableTypes.HasRefreshButton[tableType])
+        {
+            <button type="button" class="toolbar-button @Model-refresh"><i class="fas fa-sync-alt"></i></button>
+        }
+        @if (TableTypes.HasRemoveButton[tableType])
+        {
+            <button type="button" class="toolbar-button @Model-remove"><i class="fas fa-trash"></i></button>
+        } 
+    </div>
+</div>
+<div class="form-popup"></div>
+<table class="companies-table @Model table-hover" data-table-type="@Model"></table>
+<script>InitializeCompaniesTable("@Model")</script>
+

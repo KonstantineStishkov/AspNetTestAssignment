@@ -1,0 +1,32 @@
+﻿@using AspNetTestAssignment.Constants
+@model Company
+<div class="row details-title">
+    <div class="col-md-3">Company Details</div>
+    <div class="col-md-3">@Model.Name</div>
+</div>
+
+<div class="details-container" data-company-id="@Model.Id">
+    <div class="company-info-summary">
+        <div class="row">
+            <div class="col-md-11 summary-title">Info</div>
+            <div class="col-md-1"><i class="fas fa-check"></i></div>
+        </div>
+        <partial name="_Summary" model="@Model"></partial>
+    </div>
+    <div class="company-info-history">
+        <partial name="List" model="TableType.CompanyHistory.ToString()"></partial>
+    </div>
+    <div class="company-info-notes">
+        <partial name="List" model="TableType.Notes.ToString()"></partial>
+    </div>
+    <div class="company-info-employees">
+        <div class="row">
+            <div class="col-md-6">
+                <partial name="List" model="TableType.Employees.ToString()"></partial>
+            </div>
+            <div class="col-md-6">
+                <partial name="_EmployeeSummary" model="Model.Employees.FirstOrDefault()"></partial>
+            </div>
+        </div>       
+    </div>
+</div>

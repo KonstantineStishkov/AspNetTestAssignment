@@ -1,0 +1,176 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.companies-table {
+  display: block;
+  margin: 0.5em;
+}
+
+.Companies-toolbar {
+  margin: 0.5em;
+}
+
+.CompanyHistory-toolbar {
+  margin: 0.5em;
+}
+
+.Notes-toolbar {
+  margin: 0.5em;
+}
+
+.Employees-toolbar {
+  margin: 0.5em;
+}
+
+.left-align {
+  float: left;
+}
+
+.right-align {
+  float: right;
+}
+
+.toolbar-button {
+  border: none;
+}
+
+.company-submit {
+}
+
+.company-cancel {
+}
+
+.table-header-line {
+  width: 100%;
+  display: flex;
+  border: solid;
+  border-width: 1px;
+  border-color: #d7d7d7;
+}
+
+.table-body {
+  width: 100%;
+  display: block;
+}
+
+.table-line {
+  width: 100%;
+  display: flex;
+  border: solid;
+  border-width: 1px;
+  border-color: #d7d7d7;
+}
+
+.table-line:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
+
+.table-cell {
+}
+
+.form-popup {
+  display: none;
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  width: 40em;
+  height: 30em;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+  background-color: white;
+}
+
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+.input-table {
+  width: 95%;
+  margin: 1em;
+}
+
+.input-header-line {
+  text-align: center;
+  vertical-align: top;
+  font-size: 1.1em;
+}
+
+.input-header-cell {
+}
+
+.input-line {
+}
+
+.input-label-cell {
+}
+
+.input-cell {
+}
+
+.companies-button {
+  width: 6em;
+}
+
+.details-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.company-info-summary {
+  width: 25em;
+  border: solid;
+  border-color: lightgrey;
+  padding: 5px;
+  margin: 5px;
+}
+
+.company-info-notes {
+  width: 25em;
+  border: solid;
+  border-color: lightgrey;
+  padding: 5px;
+  margin: 5px;
+}
+
+.company-info-employees {
+  width: 50em;
+  border: solid;
+  border-color: lightgrey;
+  padding: 5px;
+  margin: 5px;
+}
+
+.company-info-history {
+  width: 25em;
+  border: solid;
+  border-color: lightgrey;
+  padding: 5px;
+  margin: 5px;
+}

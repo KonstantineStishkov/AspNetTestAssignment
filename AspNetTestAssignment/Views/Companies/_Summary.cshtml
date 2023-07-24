@@ -1,0 +1,54 @@
+﻿@model Company
+
+<form>
+    <table class="input-table">
+        <tr class="input-line">
+            <th class="input-label-cell">
+                <label asp-for="Id"></label>
+            </th>
+            <td class="input-cell">
+                <input asp-for="Id" class="form-control" disabled />
+            </td>
+        </tr>
+        <tr class="input-line">
+            <th class="input-label-cell">
+                <label asp-for="Name"></label>
+            </th>
+            <td class="input-cell">
+                <input asp-for="Name" class="form-control" disabled />
+            </td>
+        </tr>
+        <tr class="input-line">
+            <th class="input-label-cell">
+                <label asp-for="Address"></label>
+            </th>
+            <td class="input-cell">
+                <textarea asp-for="Address" class="form-control" style="resize: none;" disabled></textarea>
+            </td>
+        </tr>
+        <tr class="input-line">
+            <th class="input-label-cell">
+                <label asp-for="City"></label>
+            </th>
+            <td class="input-cell">
+                <input asp-for="City" class="form-control" disabled/>
+            </td>
+        </tr>
+        <tr class="input-line">
+            <th class="input-label-cell">
+                <label asp-for="State"></label>
+            </th>
+            <td class="input-cell">
+                <input asp-for="State" class="form-control" disabled/>
+            </td>
+        </tr>
+        <tr class="input-line">
+            <th class="input-label-cell">
+                <label asp-for="Phone"></label>
+            </th>
+            <td class="input-cell">
+                <input asp-for="Phone" class="form-control" disabled/>
+            </td>
+        </tr>
+    </table>
+</form>
