@@ -34,7 +34,7 @@
             { TableType.Notes, new List<ColumnInfo>()
             {
                 new ColumnInfo(){ Name = "InvoiceNumber", ShowName = "Invoice Number", Width = "50%" },
-                new ColumnInfo(){ Name = "Employee", ShowName = "Employee", Width = "50%" },
+                new ColumnInfo(){ Name = "EmployeeName", ShowName = "Employee", Width = "50%" },
             } },
             { TableType.Employees, new List<ColumnInfo>()
             {

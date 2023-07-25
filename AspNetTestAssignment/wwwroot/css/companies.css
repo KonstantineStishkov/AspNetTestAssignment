@@ -174,3 +174,7 @@ body {
   padding: 5px;
   margin: 5px;
 }
+
+.error-message {
+  color: rgba(255, 62, 62, 0.397);
+}

@@ -1,6 +1,6 @@
 ﻿function InitializeCompaniesTable(table_type) {
   let table = $("." + table_type)[0];
-  let url = table_type == 'Companies' ? "Companies/GetColumns" : 'GetColumns';
+  let url = table_type == "Companies" ? "Companies/GetColumns" : "GetColumns";
   let form = $(".form-popup");
   let columns;
 
@@ -15,15 +15,15 @@
   SetEventHandlers();
 
   function SetEventHandlers() {
-    $('.' + table_type + '-add').unbind();
-    $('.' + table_type + '-add').on("click", function (e) {
+    $("." + table_type + "-add").unbind();
+    $("." + table_type + "-add").on("click", function (e) {
       OpenForm(form, table_type, function () {
         FillTable(table, table_type, columns);
       });
     });
-  
-    $('.' + table_type + '-refresh').unbind();
-    $('.' + table_type + '-refresh').on("click", function (e) {
+
+    $("." + table_type + "-refresh").unbind();
+    $("." + table_type + "-refresh").on("click", function (e) {
       FillTable(table, table_type, columns);
     });
   }
@@ -49,7 +49,10 @@ function ComposeHead(table, columns) {
 }
 
 function FillTable(table, table_type, columns) {
-  let url = table_type == 'Companies' ? "Companies/Get" + table_type : 'Get' + table_type;
+  let url =
+    table_type == "Companies"
+      ? "Companies/Get" + table_type
+      : "Get" + table_type;
   let tbody = $("tbody", table)[0];
   let company_id;
 
@@ -69,22 +72,41 @@ function FillTable(table, table_type, columns) {
 
     console.log(columns);
 
-    $.each(data, function (id, company) {
+    $.each(data, function (id, element) {
       let tr = document.createElement("tr");
       $(tr).addClass("table-line");
       $.each(columns, function (id, column) {
+        let key = column.name.charAt(0).toLowerCase() + column.name.slice(1)
         let td = document.createElement("td");
         $(td).addClass("table-cell");
         $(td).addClass("cell-" + column.name);
         $(td).attr("width", column.width);
-        $(td).html(company[column.name.toLowerCase()]);
+        $(td).html(element[key]);
         tr.appendChild(td);
       });
 
       $(tr).unbind();
-      $(tr).on("click", function () {
-        window.location.href = "/Companies/Details?id=" + company.id;
-      });
+
+      if(table_type == 'Companies'){
+        let company = element;
+        $(tr).on("click", function () {
+          window.location.href = "/Companies/Details?id=" + company.id;
+        });
+      }
+
+      if(table_type == 'Employees'){
+        let url = '/Companies/_EmployeeSummary';
+        let employee = element;
+
+        $(tr).on("click", function () {
+          $.get(url, { companyId: employee.companyId, firstName: employee.firstName, lastName: employee.lastName }, function(result){
+            let container = $('.employee-summary-container');
+            console.log(container);
+            $(container).empty();
+            $(container).html(result);
+          });
+        });
+      }
 
       tbody.appendChild(tr);
     });
@@ -109,20 +131,19 @@ function OpenForm(form, table_type, on_form_close_action) {
   console.log(data);
 
   $.get(url, data, function (result) {
+    console.log(result);
     $(form).html(result);
-    $('.' + table_type + '-submit', form).unbind();
-    $('.' + table_type + '-submit', form).on("click", function (e) {
+    $("." + table_type + "-submit", form).unbind();
+    $("." + table_type + "-submit", form).on("click", function (e) {
       SubmitForm(form[0], table_type, on_form_close_action);
     });
 
-    $('.' + table_type + '-cancel', form).unbind();
-    $('.' + table_type + '-cancel', form).on("click", function (e) {
+    $("." + table_type + "-cancel", form).unbind();
+    $("." + table_type + "-cancel", form).on("click", function (e) {
       CloseForm(form[0]);
     });
   });
 }
-
-function FillForm(form, model) {}
 
 function CloseForm(form) {
   form.style.display = "none";
@@ -131,14 +152,7 @@ function CloseForm(form) {
 function SubmitForm(form, table_type, on_form_close_action) {
   console.log($('input[name="Name"]', form).val());
 
-  let data = {
-    method: "POST",
-    Name: $('input[name="Name"]', form).val(),
-    Address: $('textarea[name="Address"]', form).val(),
-    City: $('input[name="City"]', form).val(),
-    State: $('input[name="State"]', form).val(),
-    Phone: $('input[name="Phone"]', form).val(),
-  };
+  let data = GetSubmitData(form, table_type);
 
   console.log(data);
 
@@ -157,4 +171,37 @@ function SubmitForm(form, table_type, on_form_close_action) {
       });
     }
   });
+}
+
+function GetSubmitData(form, table_type) {
+  switch (table_type) {
+    case "Companies":
+      return {
+        method: "POST",
+        Name: $('input[name="Name"]', form).val(),
+        Address: $('textarea[name="Address"]', form).val(),
+        City: $('input[name="City"]', form).val(),
+        State: $('input[name="State"]', form).val(),
+        Phone: $('input[name="Phone"]', form).val(),
+      };
+    case "Notes":
+      return {
+        method: "POST",
+        Id: $('input[name="Id"]', form).val(),
+        CompanyId: $('input[name="CompanyId"]', form).val(),
+        InvoiceNumber: $('input[name="InvoiceNumber"]', form).val(),
+        EmployeeId: $('select[name="Employee"]', form).val(),
+      };
+      case "Employees":
+        return {
+          method: "POST",
+          Id: $('input[name="Id"]', form).val(),
+          CompanyId: $('input[name="CompanyId"]', form).val(),
+          FirstName: $('input[name="FirstName"]', form).val(),
+          LastName: $('input[name="LastName"]', form).val(),
+          Title: $('input[name="Title"]', form).val(),
+          BirthDate: $('input[name="BirthDate"]', form).val(),
+          Position: $('input[name="Position"]', form).val(),
+        };
+  }
 }

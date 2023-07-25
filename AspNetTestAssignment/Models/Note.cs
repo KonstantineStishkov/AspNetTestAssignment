@@ -7,14 +7,13 @@ namespace AspNetTestAssignment.Models
     {
         public string Id { get; set; }
         public string CompanyId { get; set; }
+        public string EmployeeId { get; set; }
         public int InvoiceNumber { get; set; }
         public Employee? Employee { get; set; }
+        public string EmployeeName { get; set; }
 
         [NotMapped]
         public SelectList AvailableEmployees { get; set; }
-
-        [NotMapped]
-        public string EmployeeId { get; set; }
 
         [NotMapped]
         public Dictionary<string, string> Errors { get; set; }

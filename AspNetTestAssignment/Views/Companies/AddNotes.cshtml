@@ -1,8 +1,8 @@
 ﻿@model Note
 
 <form>
-    <input asp-for="Id" hidden />
-    <input asp-for="CompanyId" hidden />
+    <input asp-for="Id" value="@Model.Id" hidden />
+    <input asp-for="CompanyId" value="@Model.CompanyId" hidden />
     <table class="input-table">
         <tr class="input-header-line">
             <th class="input-header-cell" colspan="2">Adding new note</th>
@@ -14,7 +14,7 @@
             </th>
             <td class="input-cell">
                 <input asp-for="InvoiceNumber" class="form-control" disabled />
-                <span asp-validation-for="InvoiceNumber"></span>
+                <span class="error-message" asp-validation-for="InvoiceNumber"></span>
             </td>
         </tr>
         <tr class="input-line">
@@ -24,13 +24,13 @@
             <td class="input-cell">
                 @if (Model.AvailableEmployees?.Count() > 0)
                 {
-                    <select asp-for="Employee" asp-items="@Model.AvailableEmployees"></select>
+                    <select asp-for="Employee" asp-items="@Model.AvailableEmployees" class="form-control"></select>
                 }
                 else
                 {
-                    <div class="error-message">No available employees</div>
+                    <input asp-for="Employee" value="No available employees" class="form-control" disabled />
                 }
-                <span asp-validation-for="Employee"></span>
+                <span class="error-message" asp-validation-for="Employee"></span>
             </td>
         </tr>
         <tr class="buttons-line">

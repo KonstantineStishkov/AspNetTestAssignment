@@ -58,7 +58,7 @@ namespace AspNetTestAssignment.Controllers
             List<History>? model;
             using (CompaniesContext context = new CompaniesContext())
             {
-                model = context.Companies.FirstOrDefault(c => c.Id.Equals(id, StringComparison.OrdinalIgnoreCase))?.CompanyHistory;
+                model = context.CompanyHistories.Where(ch => ch.CompanyId.Equals(id, StringComparison.OrdinalIgnoreCase))?.ToList();
             }
 
             return Json(model?.Count > 0 ? model : false);
@@ -70,7 +70,7 @@ namespace AspNetTestAssignment.Controllers
             List<Note>? model;
             using (CompaniesContext context = new CompaniesContext())
             {
-                model = context.Companies.FirstOrDefault(c => c.Id.Equals(id, StringComparison.OrdinalIgnoreCase))?.Notes;
+                model = context.Notes.Where(n => n.CompanyId.Equals(id, StringComparison.OrdinalIgnoreCase))?.ToList();
             }
 
             return Json(model?.Count > 0 ? model : false);
@@ -79,10 +79,18 @@ namespace AspNetTestAssignment.Controllers
         [HttpGet]
         public IActionResult GetEmployees(string id)
         {
-            List<Employee>? model;
-            using (CompaniesContext context = new CompaniesContext())
+            List<Employee>? model = null;
+
+            try
             {
-                model = context.Companies.FirstOrDefault(c => c.Id.Equals(id, StringComparison.OrdinalIgnoreCase))?.Employees;
+                using (CompaniesContext context = new CompaniesContext())
+                {
+                    model = context.Employees.Where(e => e.CompanyId.Equals(id, StringComparison.OrdinalIgnoreCase))?.ToList();
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
 
             return Json(model?.Count > 0 ? model : false);
@@ -131,11 +139,13 @@ namespace AspNetTestAssignment.Controllers
                     return Json("Company not found");
                 }
 
-                int invoiceNumber = company.Notes?.Count > 0 ? company.Notes.Max(n => n.InvoiceNumber) : 1;
+                company.Employees = context.Employees.Where(e => e.CompanyId.Equals(company.Id, StringComparison.OrdinalIgnoreCase))?.ToList() ?? new List<Employee>();
+                company.Notes = context.Notes.Where(n => n.CompanyId.Equals(company.Id)).ToList();
+                int invoiceNumber = company.Notes.Count() > 0 ? company.Notes.Max(n => n.InvoiceNumber) : 1;
                 model = new Note(invoiceNumber, company);
             }
 
-            if(model == null)
+            if (model == null)
             {
                 return Json("Failed to create new note");
             }
@@ -153,23 +163,25 @@ namespace AspNetTestAssignment.Controllers
 
             using (CompaniesContext context = new CompaniesContext())
             {
-                Company? company = context.Companies.FirstOrDefault(c => c.Id.Equals(model.Id, StringComparison.OrdinalIgnoreCase));
+                Company? company = context.Companies.FirstOrDefault(c => c.Id.Equals(model.CompanyId, StringComparison.OrdinalIgnoreCase));
 
-                if(company == null)
+                if (company == null)
                 {
                     model.Errors.Add(string.Empty, "Company not found");
                     return Json(model.Errors);
                 }
 
-                model.Employee = company.Employees.FirstOrDefault(e => e.Id.Equals(model.EmployeeId, StringComparison.OrdinalIgnoreCase));
+                model.Employee = context.Employees.FirstOrDefault(e => e.Id.Equals(model.EmployeeId, StringComparison.OrdinalIgnoreCase));
 
-                if(model.Employee == null)
+                if (model.Employee == null)
                 {
                     model.Errors.Add(string.Empty, "Employee not found");
                     return Json(model.Errors);
                 }
 
+                model.EmployeeName = model.Employee.FullName;
                 company.Notes?.Add(model);
+                context.Notes?.Add(model);
                 context.SaveChanges();
             }
 
@@ -177,9 +189,24 @@ namespace AspNetTestAssignment.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddEmployees()
+        public IActionResult AddEmployees(string id)
         {
-            return PartialView();
+            Employee model = new Employee();
+
+            using (CompaniesContext context = new CompaniesContext())
+            {
+                Company? company = context.Companies.FirstOrDefault(c => c.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+
+                if (company == null)
+                {
+                    model.Errors.Add(string.Empty, "Company not found");
+                    return Json(model.Errors);
+                }
+
+                model.CompanyId = company.Id;
+            }
+
+            return PartialView(model);
         }
 
         [HttpPost]
@@ -192,7 +219,7 @@ namespace AspNetTestAssignment.Controllers
 
             using (CompaniesContext context = new CompaniesContext())
             {
-                Company? company = context.Companies.FirstOrDefault(c => c.Id.Equals(model.Id, StringComparison.OrdinalIgnoreCase));
+                Company? company = context.Companies.FirstOrDefault(c => c.Id.Equals(model.CompanyId, StringComparison.OrdinalIgnoreCase));
 
                 if (company == null)
                 {
@@ -201,6 +228,7 @@ namespace AspNetTestAssignment.Controllers
                 }
 
                 company.Employees.Add(model);
+                context.Employees.Add(model);
                 context.SaveChanges();
             }
 
@@ -211,6 +239,21 @@ namespace AspNetTestAssignment.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult _EmployeeSummary(string companyId, string firstName, string lastName)
+        {
+            Employee? model = null;
+
+            using (CompaniesContext context = new CompaniesContext())
+            {
+                model = context.Employees.FirstOrDefault(e => e.CompanyId.Equals(companyId, StringComparison.OrdinalIgnoreCase) && 
+                                                              e.FirstName.Equals(firstName) &&
+                                                              e.LastName.Equals(lastName));
+            }
+
+            return PartialView(model);
         }
     }
 }

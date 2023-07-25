@@ -15,9 +15,7 @@ namespace AspNetTestAssignment.Models
         public string Title { get; set; }
         public DateTime BirthDate { get; set; }
         public string Position { get; set; }
-
-        [NotMapped]
-        public string CompanyId { get; set; };
+        public string CompanyId { get; set; }
 
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";

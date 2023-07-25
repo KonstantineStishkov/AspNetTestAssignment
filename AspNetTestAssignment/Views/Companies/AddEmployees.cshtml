@@ -1,8 +1,8 @@
 ﻿@model Employee
 
 <form>
-    <input asp-for="Id" hidden />
-    <input asp-for="CompanyId" hidden />
+    <input asp-for="Id" value="@Model.Id" hidden />
+    <input asp-for="CompanyId" value="@Model.CompanyId" hidden />
     <table class="input-table">
         <tr class="input-header-line">
             <th class="input-header-cell" colspan="2">Adding new employee</th>
@@ -14,7 +14,7 @@
             </th>
             <td class="input-cell">
                 <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName"></span>
+                <span class="error-message" asp-validation-for="FirstName"></span>
             </td>
         </tr>
         <tr class="input-line">
@@ -23,7 +23,7 @@
             </th>
             <td class="input-cell">
                 <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName"></span>
+                <span class="error-message" asp-validation-for="LastName"></span>
             </td>
         </tr>
         <tr class="input-line">
@@ -32,7 +32,7 @@
             </th>
             <td class="input-cell">
                 <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title"></span>
+                <span class="error-message" asp-validation-for="Title"></span>
             </td>
         </tr>
         <tr class="input-line">
@@ -40,8 +40,8 @@
                 <label asp-for="BirthDate"></label>
             </th>
             <td class="input-cell">
-                <input asp-for="BirthDate" class="form-control" />
-                <span asp-validation-for="BirthDate"></span>
+                <input asp-for="BirthDate" class="form-control" type="date" />
+                <span class="error-message" asp-validation-for="BirthDate"></span>
             </td>
         </tr>
         <tr class="input-line">
@@ -50,15 +50,15 @@
             </th>
             <td class="input-cell">
                 <input asp-for="Position" class="form-control" />
-                <span asp-validation-for="Position"></span>
+                <span class="error-message" asp-validation-for="Position"></span>
             </td>
         </tr>
         <tr class="buttons-line">
             <td class="button-cell">
-                <button type="button" class="form-control Employees-button Notes-submit">Submit</button>
+                <button type="button" class="form-control Employees-button Employees-submit">Submit</button>
             </td>
             <td class="button-cell">
-                <button type="button" class="form-control Employees-button Notes-cancel">Cancel</button>
+                <button type="button" class="form-control Employees-button Employees-cancel">Cancel</button>
             </td>
         </tr>
     </table>

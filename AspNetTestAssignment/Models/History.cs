@@ -3,6 +3,7 @@
     public class History
     {
         public string Id { get; set; }
+        public string CompanyId { get; set; }
         public DateTime OrderDate { get; set; }
         public string StoreCity { get; set; }
 

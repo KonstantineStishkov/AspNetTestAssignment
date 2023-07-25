@@ -11,6 +11,7 @@ namespace AspNetTestAssignment.DataBase
         }
 
         public DbSet<Company> Companies { get; set; }
+        public DbSet<History> CompanyHistories { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Note> Notes { get; set; }
     }
