@@ -141,7 +141,7 @@ namespace AspNetTestAssignment.Controllers
 
                 company.Employees = context.Employees.Where(e => e.CompanyId.Equals(company.Id, StringComparison.OrdinalIgnoreCase))?.ToList() ?? new List<Employee>();
                 company.Notes = context.Notes.Where(n => n.CompanyId.Equals(company.Id)).ToList();
-                int invoiceNumber = company.Notes.Count() > 0 ? company.Notes.Max(n => n.InvoiceNumber) : 1;
+                int invoiceNumber = company.Notes.Count() > 0 ? company.Notes.Max(n => n.InvoiceNumber) + 1 : 1;
                 model = new Note(invoiceNumber, company);
             }
 
@@ -206,6 +206,8 @@ namespace AspNetTestAssignment.Controllers
                 model.CompanyId = company.Id;
             }
 
+            ViewBag.IsEdit = false;
+            ViewBag.IsAdd = true;
             return PartialView(model);
         }
 
@@ -242,7 +244,7 @@ namespace AspNetTestAssignment.Controllers
         }
 
         [HttpGet]
-        public IActionResult _EmployeeSummary(string companyId, string firstName, string lastName)
+        public IActionResult _EmployeeSummary(string companyId, string firstName, string lastName, bool isEdit = false)
         {
             Employee? model = null;
 
@@ -253,7 +255,9 @@ namespace AspNetTestAssignment.Controllers
                                                               e.LastName.Equals(lastName));
             }
 
-            return PartialView(model);
+            ViewBag.IsEdit = isEdit;
+            ViewBag.IsAdd = false;
+            return PartialView("AddEmployees", model);
         }
     }
 }

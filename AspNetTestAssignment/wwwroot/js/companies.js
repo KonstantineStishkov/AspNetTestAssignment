@@ -22,6 +22,24 @@
       });
     });
 
+    $("." + table_type + "-edit").unbind();
+    $("." + table_type + "-edit").on("click", function (e) {
+      console.log('click edit');
+      if (table_type == "Companies") {
+        let is_edit = $(table).attr("data-edit-mode");
+
+        if (is_edit == "true") {
+          $(table).attr("data-edit-mode", "false");
+          $(table).addClass("is-edit-false");
+          $(table).removeClass("is-edit-true");
+        } else {
+          $(table).attr("data-edit-mode", "true");
+          $(table).addClass("is-edit-true");
+          $(table).removeClass("is-edit-false");
+        }
+      }
+    });
+
     $("." + table_type + "-refresh").unbind();
     $("." + table_type + "-refresh").on("click", function (e) {
       FillTable(table, table_type, columns);
@@ -76,7 +94,7 @@ function FillTable(table, table_type, columns) {
       let tr = document.createElement("tr");
       $(tr).addClass("table-line");
       $.each(columns, function (id, column) {
-        let key = column.name.charAt(0).toLowerCase() + column.name.slice(1)
+        let key = column.name.charAt(0).toLowerCase() + column.name.slice(1);
         let td = document.createElement("td");
         $(td).addClass("table-cell");
         $(td).addClass("cell-" + column.name);
@@ -87,24 +105,32 @@ function FillTable(table, table_type, columns) {
 
       $(tr).unbind();
 
-      if(table_type == 'Companies'){
+      if (table_type == "Companies") {
         let company = element;
         $(tr).on("click", function () {
           window.location.href = "/Companies/Details?id=" + company.id;
         });
       }
 
-      if(table_type == 'Employees'){
-        let url = '/Companies/_EmployeeSummary';
+      if (table_type == "Employees") {
+        let url = "/Companies/_EmployeeSummary";
         let employee = element;
 
         $(tr).on("click", function () {
-          $.get(url, { companyId: employee.companyId, firstName: employee.firstName, lastName: employee.lastName }, function(result){
-            let container = $('.employee-summary-container');
-            console.log(container);
-            $(container).empty();
-            $(container).html(result);
-          });
+          $.get(
+            url,
+            {
+              companyId: employee.companyId,
+              firstName: employee.firstName,
+              lastName: employee.lastName,
+            },
+            function (result) {
+              let container = $(".employee-summary-container");
+              console.log(container);
+              $(container).empty();
+              $(container).html(result);
+            }
+          );
         });
       }
 
@@ -192,16 +218,16 @@ function GetSubmitData(form, table_type) {
         InvoiceNumber: $('input[name="InvoiceNumber"]', form).val(),
         EmployeeId: $('select[name="Employee"]', form).val(),
       };
-      case "Employees":
-        return {
-          method: "POST",
-          Id: $('input[name="Id"]', form).val(),
-          CompanyId: $('input[name="CompanyId"]', form).val(),
-          FirstName: $('input[name="FirstName"]', form).val(),
-          LastName: $('input[name="LastName"]', form).val(),
-          Title: $('input[name="Title"]', form).val(),
-          BirthDate: $('input[name="BirthDate"]', form).val(),
-          Position: $('input[name="Position"]', form).val(),
-        };
+    case "Employees":
+      return {
+        method: "POST",
+        Id: $('input[name="Id"]', form).val(),
+        CompanyId: $('input[name="CompanyId"]', form).val(),
+        FirstName: $('input[name="FirstName"]', form).val(),
+        LastName: $('input[name="LastName"]', form).val(),
+        Title: $('input[name="Title"]', form).val(),
+        BirthDate: $('input[name="BirthDate"]', form).val(),
+        Position: $('input[name="Position"]', form).val(),
+      };
   }
 }

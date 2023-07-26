@@ -6,26 +6,26 @@
 </div>
 
 <div class="details-container" data-company-id="@Model.Id">
-    <div class="company-info-summary">
+    <div class="company-info company-info-summary">
         <div class="row">
-            <div class="col-md-11 summary-title">Info</div>
+            <div class="col-md-10 summary-title">Info</div>
             <div class="col-md-1"><i class="fas fa-check"></i></div>
         </div>
         <partial name="_Summary" model="@Model"></partial>
     </div>
-    <div class="company-info-history">
+    <div class="company-info company-info-history">
         <partial name="List" model="TableType.CompanyHistory.ToString()"></partial>
     </div>
-    <div class="company-info-notes">
+    <div class="company-info company-info-notes">
         <partial name="List" model="TableType.Notes.ToString()"></partial>
     </div>
-    <div class="company-info-employees">
+    <div class="company-info company-info-employees">
         <div class="row">
             <div class="col-md-6">
                 <partial name="List" model="TableType.Employees.ToString()"></partial>
             </div>
             <div class="employee-summary-container col-md-6">
-                <partial name="_EmployeeSummary" model="Model.Employees.FirstOrDefault()"></partial>
+                <partial name="AddEmployees" model="Model.Employees.FirstOrDefault()"></partial>
             </div>
         </div>       
     </div>

@@ -56,6 +56,7 @@ body {
 
 .toolbar-button {
   border: none;
+  background-color: white;
 }
 
 .company-submit {
@@ -143,38 +144,45 @@ body {
   flex-wrap: wrap;
 }
 
-.company-info-summary {
-  width: 25em;
-  border: solid;
+.company-info {
+  border-top: solid;
+  border-bottom: solid;
   border-color: lightgrey;
   padding: 5px;
   margin: 5px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.company-info-summary {
+  height: 30em;
+  width: 25em;
 }
 
 .company-info-notes {
+  height: 30em;
   width: 25em;
-  border: solid;
-  border-color: lightgrey;
-  padding: 5px;
-  margin: 5px;
 }
 
 .company-info-employees {
+  height: 25em;
   width: 50em;
-  border: solid;
-  border-color: lightgrey;
-  padding: 5px;
-  margin: 5px;
 }
 
 .company-info-history {
+  height: 30em;
   width: 25em;
+}
+
+.is-edit-true {
   border: solid;
-  border-color: lightgrey;
-  padding: 5px;
-  margin: 5px;
+  border-color: lightcyan;
+}
+
+.is-edit-false {
+  border: none;
 }
 
 .error-message {
-  color: rgba(255, 62, 62, 0.397);
+  color: rgba(255, 62, 62, 0.548);
 }

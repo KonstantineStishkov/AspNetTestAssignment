@@ -1,20 +1,39 @@
 ﻿@model Employee
 
+@{
+    bool isEdit = ViewBag?.IsEdit ?? false;
+    bool isAdd = ViewBag?.IsAdd ?? false;
+}
+
 <form>
-    <input asp-for="Id" value="@Model.Id" hidden />
-    <input asp-for="CompanyId" value="@Model.CompanyId" hidden />
+    @if(Model != null)
+    {
+        <input asp-for="Id" value="@Model.Id" hidden />
+        <input asp-for="CompanyId" value="@Model.CompanyId" hidden />
+    }
     <table class="input-table">
-        <tr class="input-header-line">
-            <th class="input-header-cell" colspan="2">Adding new employee</th>
-        </tr>
-        <br />
+
+        @if (isAdd)
+        {
+            <tr class="input-header-line">
+                <th class="input-header-cell" colspan="2">Adding new employee</th>
+            </tr>
+            <br />
+        }
         <tr class="input-line">
             <th class="input-label-cell">
                 <label asp-for="FirstName"></label>
             </th>
             <td class="input-cell">
-                <input asp-for="FirstName" class="form-control" />
-                <span class="error-message" asp-validation-for="FirstName"></span>
+                @if (isEdit || isAdd)
+                {
+                    <input asp-for="FirstName" class="form-control" />
+                    <span class="error-message" asp-validation-for="FirstName"></span>
+                }
+                else
+                {
+                    <input asp-for="FirstName" class="form-control" disabled />
+                }
             </td>
         </tr>
         <tr class="input-line">
@@ -22,8 +41,15 @@
                 <label asp-for="LastName"></label>
             </th>
             <td class="input-cell">
-                <input asp-for="LastName" class="form-control" />
-                <span class="error-message" asp-validation-for="LastName"></span>
+                @if (isEdit || isAdd)
+                {
+                    <input asp-for="LastName" class="form-control" />
+                    <span class="error-message" asp-validation-for="LastName"></span>
+                }
+                else
+                {
+                    <input asp-for="LastName" class="form-control" disabled />
+                }
             </td>
         </tr>
         <tr class="input-line">
@@ -31,8 +57,15 @@
                 <label asp-for="Title"></label>
             </th>
             <td class="input-cell">
-                <input asp-for="Title" class="form-control" />
-                <span class="error-message" asp-validation-for="Title"></span>
+                @if (isEdit || isAdd)
+                {
+                    <input asp-for="Title" class="form-control" />
+                    <span class="error-message" asp-validation-for="Title"></span>
+                }
+                else
+                {
+                    <input asp-for="Title" class="form-control" disabled />
+                }
             </td>
         </tr>
         <tr class="input-line">
@@ -40,8 +73,15 @@
                 <label asp-for="BirthDate"></label>
             </th>
             <td class="input-cell">
-                <input asp-for="BirthDate" class="form-control" type="date" />
-                <span class="error-message" asp-validation-for="BirthDate"></span>
+                @if (isEdit || isAdd)
+                {
+                    <input asp-for="BirthDate" class="form-control" type="date" />
+                    <span class="error-message" asp-validation-for="BirthDate"></span>
+                }
+                else
+                {
+                    <input asp-for="BirthDate" class="form-control" type="date" disabled />
+                }
             </td>
         </tr>
         <tr class="input-line">
@@ -49,17 +89,27 @@
                 <label asp-for="Position"></label>
             </th>
             <td class="input-cell">
-                <input asp-for="Position" class="form-control" />
-                <span class="error-message" asp-validation-for="Position"></span>
+                @if (isEdit || isAdd)
+                {
+                    <input asp-for="Position" class="form-control" />
+                    <span class="error-message" asp-validation-for="Position"></span>
+                }
+                else
+                {
+                    <input asp-for="Position" class="form-control" disabled />
+                }
             </td>
         </tr>
-        <tr class="buttons-line">
-            <td class="button-cell">
-                <button type="button" class="form-control Employees-button Employees-submit">Submit</button>
-            </td>
-            <td class="button-cell">
-                <button type="button" class="form-control Employees-button Employees-cancel">Cancel</button>
-            </td>
-        </tr>
+        @if (isAdd)
+        {
+            <tr class="buttons-line">
+                <td class="button-cell">
+                    <button type="button" class="form-control Employees-button Employees-submit">Submit</button>
+                </td>
+                <td class="button-cell">
+                    <button type="button" class="form-control Employees-button Employees-cancel">Cancel</button>
+                </td>
+            </tr>
+        }
     </table>
 </form>
