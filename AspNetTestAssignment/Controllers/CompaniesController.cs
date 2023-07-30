@@ -1,7 +1,9 @@
 ﻿using AspNetTestAssignment.Constants;
 using AspNetTestAssignment.DataBase;
+using AspNetTestAssignment.Interfaces;
 using AspNetTestAssignment.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace AspNetTestAssignment.Controllers
@@ -244,20 +246,91 @@ namespace AspNetTestAssignment.Controllers
         }
 
         [HttpGet]
-        public IActionResult _EmployeeSummary(string companyId, string firstName, string lastName, bool isEdit = false)
+        public IActionResult _EmployeeSummary(string id, bool isEdit = false)
         {
             Employee? model = null;
 
             using (CompaniesContext context = new CompaniesContext())
             {
-                model = context.Employees.FirstOrDefault(e => e.CompanyId.Equals(companyId, StringComparison.OrdinalIgnoreCase) && 
-                                                              e.FirstName.Equals(firstName) &&
-                                                              e.LastName.Equals(lastName));
+                model = context.Employees.FirstOrDefault(e => e.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
             }
 
             ViewBag.IsEdit = isEdit;
             ViewBag.IsAdd = false;
             return PartialView("AddEmployees", model);
+        }
+
+        [HttpPost]
+        public IActionResult _EmployeeSummary(Employee model)
+        {
+            ViewBag.IsEdit = true;
+
+            if (!model.IsValid())
+            {
+                return Json(model.Errors);
+            }
+
+            using (CompaniesContext context = new CompaniesContext())
+            {
+                Employee? employee = context.Employees.FirstOrDefault(c => c.Id.Equals(model.Id, StringComparison.OrdinalIgnoreCase));
+
+                if (employee == null)
+                {
+                    model.Errors.Add(string.Empty, "Employee not found");
+                    return Json(model.Errors);
+                }
+
+                employee.CastPropertiesFrom(model);
+                context.SaveChanges();
+            }
+
+            ViewBag.IsEdit = false;
+            ViewBag.IsAdd = false;
+            return PartialView("AddEmployees", model);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(string id, TableType tableType)
+        {
+            using (CompaniesContext context = new CompaniesContext())
+            {
+                switch (tableType)
+                {
+                    case TableType.Notes:
+                        {
+                            Note? note = context.Notes.FirstOrDefault(e => e.Id == id);
+
+                            if(note == null)
+                            {
+                                return Json(false);
+                            }
+
+                            context.Notes.Remove(note);
+
+                            break;
+                        }
+                    case TableType.Employees:
+                        {
+                            Employee? employee = context.Employees.FirstOrDefault(e => e.Id == id);
+
+                            if (employee == null)
+                            {
+                                return Json(false);
+                            }
+
+                            context.Employees.Remove(employee);
+
+                            break;
+                        }
+                    default:
+                        return Json(false);
+
+                }
+
+                context.SaveChanges();
+            }
+
+            return Json(true);
         }
     }
 }

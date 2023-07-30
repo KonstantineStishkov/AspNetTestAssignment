@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using AspNetTestAssignment.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspNetTestAssignment.Models
 {
-    public class Note
+    public class Note : IRemovable
     {
         public string Id { get; set; }
         public string CompanyId { get; set; }

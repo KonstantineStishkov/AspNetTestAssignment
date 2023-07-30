@@ -4,10 +4,11 @@ using System.Net;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using AspNetTestAssignment.Interfaces;
 
 namespace AspNetTestAssignment.Models
 {
-    public class Employee
+    public class Employee : IRemovable
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -52,13 +53,13 @@ namespace AspNetTestAssignment.Models
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(Title) || !Regex.IsMatch(Title, @"^[A-Z][a-z-]"))
+            if (string.IsNullOrWhiteSpace(Title) || !Regex.IsMatch(Title, @"^[A-Z][A-Za-z-\.]"))
             {
                 Errors.Add(nameof(Title), "Title is not valid");
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(Position) || !Regex.IsMatch(Position, @"^[A-Z][a-z-]"))
+            if (string.IsNullOrWhiteSpace(Position) || !Regex.IsMatch(Position, @"^[A-Z][A-Za-z-]"))
             {
                 Errors.Add(nameof(Position), "Title is not valid");
                 return false;
@@ -77,6 +78,17 @@ namespace AspNetTestAssignment.Models
             }
 
             return true;
+        }
+
+        public void CastPropertiesFrom(Employee employee)
+        {
+            Id = employee.Id;
+            CompanyId = employee.CompanyId;
+            FirstName = employee.FirstName;
+            LastName = employee.LastName;
+            Title = employee.Title;
+            BirthDate = employee.BirthDate;
+            Position = employee.Position;
         }
     }
 }

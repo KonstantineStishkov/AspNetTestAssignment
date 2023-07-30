@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using AspNetTestAssignment.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace AspNetTestAssignment.Models
 {
-    public class Company
+    public class Company : IRemovable
     {
         public string Id { get; set; }
         public string Name { get; set; }

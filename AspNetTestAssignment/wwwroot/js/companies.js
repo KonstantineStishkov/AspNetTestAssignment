@@ -24,7 +24,7 @@
 
     $("." + table_type + "-edit").unbind();
     $("." + table_type + "-edit").on("click", function (e) {
-      console.log('click edit');
+      console.log("click edit");
       if (table_type == "Companies") {
         let is_edit = $(table).attr("data-edit-mode");
 
@@ -36,6 +36,46 @@
           $(table).attr("data-edit-mode", "true");
           $(table).addClass("is-edit-true");
           $(table).removeClass("is-edit-false");
+        }
+      }
+
+      if (table_type == "Employees") {
+        let container = $(".employee-summary-container");
+        let form = $("form", container)[0];
+        let id_input = form.elements["Id"];
+
+        if (!id_input) {
+          return;
+        }
+
+        let employee_id = id_input.value;
+        let is_edit = $(table).attr("data-edit-mode");
+
+        if (is_edit == "true") {
+          $(table).attr("data-edit-mode", "false");
+          $(table).addClass("is-edit-false");
+          $(table).removeClass("is-edit-true");
+
+          let data = GetSubmitData(form, table_type);
+
+          $.post("/Companies/_EmployeeSummary", data, function (result) {
+            $(container).empty();
+            $(container).html(result);
+            FillTable(table, table_type, columns);
+          });
+        } else {
+          $(table).attr("data-edit-mode", "true");
+          $(table).addClass("is-edit-true");
+          $(table).removeClass("is-edit-false");
+
+          $.get(
+            "/Companies/_EmployeeSummary",
+            { method: "GET", id: employee_id, isEdit: true },
+            function (result) {
+              $(container).empty();
+              $(container).html(result);
+            }
+          );
         }
       }
     });
@@ -73,6 +113,7 @@ function FillTable(table, table_type, columns) {
       : "Get" + table_type;
   let tbody = $("tbody", table)[0];
   let company_id;
+  let selected;
 
   if (table_type != "Companies") {
     company_id = $(".details-container").attr("data-company-id");
@@ -88,11 +129,38 @@ function FillTable(table, table_type, columns) {
       tbody.appendChild(tr);
     }
 
-    console.log(columns);
+    let edit_button = $("." + table_type + "-edit")[0];
+
+    if (edit_button) {
+      edit_button.style.color = "lightgrey";
+    }
+
+    let remove_button = $("." + table_type + "-remove")[0];
+
+    if (remove_button) {
+      remove_button.style.color = "lightgrey";
+    }
+
+    $(remove_button).on("click", function () {
+      if (!selected) {
+        return;
+      }
+
+      $.get(
+        "/Companies/Delete",
+        { method: "GET", id: selected, tableType: table_type },
+        function (result) {
+          if (result == true) {
+            FillTable(table, table_type, columns);
+          }
+        }
+      );
+    });
 
     $.each(data, function (id, element) {
       let tr = document.createElement("tr");
       $(tr).addClass("table-line");
+      $(tr).attr("data-id", element.id);
       $.each(columns, function (id, column) {
         let key = column.name.charAt(0).toLowerCase() + column.name.slice(1);
         let td = document.createElement("td");
@@ -112,17 +180,27 @@ function FillTable(table, table_type, columns) {
         });
       }
 
+      if (table_type == "Notes") {
+        $(tr).on("click", function () {
+          remove_button.style.color = "black";
+          selected = $(this).attr("data-id");
+          console.log(selected);
+        });
+      }
+
       if (table_type == "Employees") {
         let url = "/Companies/_EmployeeSummary";
         let employee = element;
 
         $(tr).on("click", function () {
+          selected = $(this).attr("data-id");
+          edit_button.style.color = "black";
+          remove_button.style.color = "black";
           $.get(
             url,
             {
-              companyId: employee.companyId,
-              firstName: employee.firstName,
-              lastName: employee.lastName,
+              id: employee.id,
+              isEdit: $(table).attr("data-edit-mode"),
             },
             function (result) {
               let container = $(".employee-summary-container");
