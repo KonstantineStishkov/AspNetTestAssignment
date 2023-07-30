@@ -153,6 +153,10 @@ function FillTable(table, table_type, columns) {
           if (result == true) {
             FillTable(table, table_type, columns);
           }
+
+          if(table_type == 'Employees'){
+            $('.employee-summary-container').attr('hidden', 'true');
+          }
         }
       );
     });
@@ -205,6 +209,7 @@ function FillTable(table, table_type, columns) {
             function (result) {
               let container = $(".employee-summary-container");
               console.log(container);
+              $(container).removeAttr('hidden');
               $(container).empty();
               $(container).html(result);
             }
