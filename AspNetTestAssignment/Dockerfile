@@ -2,12 +2,13 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 32995
+ENV ASPNETCORE_URLS=http://+:32995
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["AspNetTestAssignment/AspNetTestAssignment.csproj", "AspNetTestAssignment/"]
-RUN dotnet restore "AspNetTestAssignment/AspNetTestAssignment.csproj"
+COPY ["AspNetTestAssignment.csproj", "AspNetTestAssignment"]
+RUN dotnet restore "AspNetTestAssignment.csproj"
 COPY . .
 WORKDIR "/src/AspNetTestAssignment"
 RUN dotnet build "AspNetTestAssignment.csproj" -c Release -o /app/build

@@ -225,6 +225,13 @@ function FillTable(table, table_type, columns) {
 function OpenForm(form, table_type, on_form_close_action) {
   form[0].style.display = "block";
   let url = "/Companies/Add" + table_type;
+  console.log(innerWidth);
+
+  if(innerWidth < 600){
+    let width = innerWidth - 100;
+
+    form[0].style.width = width + 'px';
+  }
 
   let company_id;
 
